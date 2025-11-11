@@ -16,39 +16,27 @@ type MovieType = {
 export const NewMovie: React.FC<Props> = ({ onAdd }) => {
   // Increase the count after successful form submission
   // to reset touched status of all the `Field`s
-  // #region State
   const [count, setCount] = useState(0);
 
-  const [title, setTitle] = useState('');
-  const [description, SetDescription] = useState('');
-  const [imageField, setImageField] = useState('');
-  const [imbdUrlField, setImbdUrlField] = useState('');
-  const [imdbIdField, setImdbIdField] = useState('');
-  //#endregion
-
-  // #region Handle(functions)
-  const handleTitleChange = (newValue: string) => {
-    setTitle(newValue.trimStart());
+  const initialForm = {
+    title: '',
+    description: '',
+    imgUrl: '',
+    imdbUrl: '',
+    imdbId: '',
   };
 
-  const handleImageChange = (newValue: string) => {
-    setImageField(newValue.trimStart());
-  };
+  const [form, SetForm] = useState(initialForm);
 
-  const handleImdbUrlChange = (newValue: string) => {
-    setImbdUrlField(newValue.trimStart());
+  const handleFormChange = (name: keyof typeof form, value: string) => {
+    SetForm(prev => ({ ...prev, [name]: value.trimStart() }));
   };
-
-  const handleImdbId = (newValue: string) => {
-    setImdbIdField(newValue.trimStart());
-  };
-  // #endregion
 
   const isActiveButton =
-    !title.trimStart() ||
-    !imageField.trimStart() ||
-    !imbdUrlField.trimStart() ||
-    !imdbIdField.trimStart();
+    !form.title.trimStart() ||
+    !form.imgUrl.trimStart() ||
+    !form.imdbUrl.trimStart() ||
+    !form.imdbId.trimStart();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -57,19 +45,9 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
       return;
     }
 
-    onAdd({
-      title: title.trimStart(),
-      description: description.trimStart(),
-      imgUrl: imageField.trimStart(),
-      imdbUrl: imbdUrlField.trimStart(),
-      imdbId: imdbIdField.trimStart(),
-    });
+    onAdd({ ...form });
 
-    setTitle('');
-    SetDescription('');
-    setImageField('');
-    setImbdUrlField('');
-    setImdbIdField('');
+    SetForm(initialForm);
     setCount(count + 1);
   };
 
@@ -80,39 +58,39 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
       <TextField
         name="title"
         label="Title"
-        value={title}
-        onChange={handleTitleChange}
+        value={form.title}
+        onChange={e => handleFormChange('title', e)}
         required
       />
 
       <TextField
         name="description"
         label="Description"
-        value={description}
-        onChange={SetDescription}
+        value={form.description}
+        onChange={e => handleFormChange('description', e)}
       />
 
       <TextField
         name="imgUrl"
         label="Image URL"
-        value={imageField}
-        onChange={handleImageChange}
+        value={form.imgUrl}
+        onChange={e => handleFormChange('imgUrl', e)}
         required
       />
 
       <TextField
         name="imdbUrl"
         label="Imdb URL"
-        value={imbdUrlField}
-        onChange={handleImdbUrlChange}
+        value={form.imdbUrl}
+        onChange={e => handleFormChange('imdbUrl', e)}
         required
       />
 
       <TextField
         name="imdbId"
         label="Imdb ID"
-        value={imdbIdField}
-        onChange={handleImdbId}
+        value={form.imdbId}
+        onChange={e => handleFormChange('imdbId', e)}
         required
       />
 
