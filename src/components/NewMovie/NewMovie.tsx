@@ -20,49 +20,40 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
   const [count, setCount] = useState(0);
 
   const [title, setTitle] = useState('');
-  const [titleError, setTitleError] = useState(true);
-
   const [description, SetDescription] = useState('');
-
   const [imageField, setImageField] = useState('');
-  const [imageFieldError, setImageFieldError] = useState(true);
-
   const [imbdUrlField, setImbdUrlField] = useState('');
-  const [imbdUrlError, setImbdUrlError] = useState(true);
-
   const [imdbIdField, setImdbIdField] = useState('');
-  const [imdbIdFieldError, setImdbIdFieldError] = useState(true);
   //#endregion
 
   // #region Handle(functions)
   const handleTitleChange = (newValue: string) => {
     setTitle(newValue.trimStart());
-    setTitleError(false);
   };
 
   const handleImageChange = (newValue: string) => {
     setImageField(newValue.trimStart());
-    setImageFieldError(false);
   };
 
   const handleImdbUrlChange = (newValue: string) => {
     setImbdUrlField(newValue.trimStart());
-    setImbdUrlError(false);
   };
 
   const handleImdbId = (newValue: string) => {
     setImdbIdField(newValue.trimStart());
-    setImdbIdFieldError(false);
   };
   // #endregion
 
   const isActiveButton =
-    !titleError && !imageFieldError && !imbdUrlError && !imdbIdFieldError;
+    !title.trimStart() ||
+    !imageField.trimStart() ||
+    !imbdUrlField.trimStart() ||
+    !imdbIdField.trimStart();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!isActiveButton) {
+    if (isActiveButton) {
       return;
     }
 
@@ -79,10 +70,6 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
     setImageField('');
     setImbdUrlField('');
     setImdbIdField('');
-    setTitleError(true);
-    setImageFieldError(true);
-    setImbdUrlError(true);
-    setImdbIdFieldError(true);
     setCount(count + 1);
   };
 
@@ -135,7 +122,7 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
             type="submit"
             data-cy="submit-button"
             className="button is-link"
-            disabled={!isActiveButton}
+            disabled={isActiveButton}
           >
             Add
           </button>
